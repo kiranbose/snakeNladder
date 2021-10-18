@@ -1,0 +1,37 @@
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.prompt {
+    height: 100vh;
+    width: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.board  {
+    height: 400px;
+    width: 400px;
+    background-color: whitesmoke;
+    display: grid;
+}
+
+.board .cell {
+    background-color: wheat;
+    border: 1px solid gray;
+    position: relative;
+}
+
+.board .cell .totem {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate('-50% -50%');
+}
+
+.rolledNumber {
+    font-size: large;
+    color: green;
+}
