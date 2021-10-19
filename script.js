@@ -141,24 +141,20 @@
                 this.placeInNewPosition(this.position);
                 initPlayers();
                 showBoard();
-                return randomNumber;
+               
             } else if (SNAKES[possiblePosition]) {
                 this.removeFromCurrentPosition(this.position);
                 this.position = SNAKES[possiblePosition];
                 this.placeInNewPosition(this.position);
-                return randomNumber;
             } else if (LADDERS[possiblePosition]) {
                 this.removeFromCurrentPosition(this.position);
                 this.position = LADDERS[possiblePosition];
                 this.placeInNewPosition(this.position);
-                return randomNumber;
             } else {
                 this.position += randomNumber;
                 this.placeInNewPosition(this.position);
-                return randomNumber;
             }
-            
-            
+            return randomNumber;
         }
 
         removeFromCurrentPosition(pos) {
