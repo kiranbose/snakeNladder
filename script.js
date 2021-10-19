@@ -4,6 +4,8 @@
     let NO_OF_PLAYERS = 2; //initializing for dev
     let NO_OF_BOXES = 10;
     let LADDERS = {
+        2: 75,
+        3: 75,
         5: 75,
         20: 60
     };
@@ -17,12 +19,7 @@
 
     
     document.getElementById('startButton').addEventListener('click', (ref)=> {
-        NO_OF_PLAYERS = +document.getElementById('numberOfPlayers').value;
-        NO_OF_BOXES = +document.getElementById('numberOfBoxes').value;
-        showBoard();
-        for(let i = 0; i<NO_OF_PLAYERS; i++) {
-            playerArr.push(new Player(`Player ${i+1}`))
-        }
+        initPlayers();
     });
     
     document.getElementById('Roll').addEventListener('click', (ref)=> {
@@ -32,6 +29,19 @@
         document.getElementById('rolledNumber').innerHTML = rolledNumber;
         document.getElementById('whose-chance').innerHTML = `PLAYER ${chance+1}`;
     });
+
+    function initPlayers() {
+        NO_OF_PLAYERS = +document.getElementById('numberOfPlayers').value;
+        NO_OF_BOXES = +document.getElementById('numberOfBoxes').value;
+        if(!NO_OF_PLAYERS || !NO_OF_BOXES) {
+            return;
+        }
+        showBoard();
+        playerArr = [];
+        for(let i = 0; i<NO_OF_PLAYERS; i++) {
+            playerArr.push(new Player(`Player ${i+1}`))
+        }
+    }
 
     hideBoard = () => {
         document.getElementById('board1').style.display = 'none';
@@ -45,6 +55,7 @@
         document.getElementById('footer').style.display = 'flex';
 
         const boardRef = document.getElementById('board1');
+        boardRef.innerHTML = '';
         boardRef.style.display = 'grid';
         const grids = Array(NO_OF_BOXES).fill('auto').join(' ');
         boardRef.style.gridTemplateColumns = grids;
@@ -62,6 +73,7 @@
         
         for(let i =0; i<(NO_OF_BOXES * NO_OF_BOXES); i++) {
             const newCell = document.createElement('div');
+            newCell.innerHTML = i;
             newCell.classList.add('cell');
             newCell.id = `cell-${i}`;
             if (LADDERS[i]) {
@@ -124,20 +136,29 @@
                 return randomNumber;
             } else if (possiblePosition === NO_OF_BOXES*NO_OF_BOXES) {
                 alert(`GAME WON BY ${this.name}`);
+                this.removeFromCurrentPosition(this.position);
+                this.position = NO_OF_BOXES*NO_OF_BOXES-1;
+                this.placeInNewPosition(this.position);
+                initPlayers();
+                showBoard();
+                return randomNumber;
             } else if (SNAKES[possiblePosition]) {
                 this.removeFromCurrentPosition(this.position);
                 this.position = SNAKES[possiblePosition];
                 this.placeInNewPosition(this.position);
+                return randomNumber;
             } else if (LADDERS[possiblePosition]) {
                 this.removeFromCurrentPosition(this.position);
                 this.position = LADDERS[possiblePosition];
                 this.placeInNewPosition(this.position);
+                return randomNumber;
+            } else {
+                this.position += randomNumber;
+                this.placeInNewPosition(this.position);
+                return randomNumber;
             }
             
             
-            this.position += randomNumber;
-            this.placeInNewPosition(this.position);
-            return randomNumber;
         }
 
         removeFromCurrentPosition(pos) {
